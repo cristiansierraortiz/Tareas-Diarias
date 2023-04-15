@@ -2,75 +2,52 @@
   <div>
     <div class="background1">
       <p class="item1">Actividades Diarias</p>
-      <p class="item2">{{ dia }}</p>
+      <p class="item2">{{ state.dia }}</p>
     </div>
     <div class="background2">
-      <ListaTareas :actividades="listaActividades" :metodoActualizar="obtenerActividades" />
+      <ListaTareas />
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
+import { onMounted, reactive } from "vue";
 import ListaTareas from "@/components/ListaTareas.vue";
 
 export default {
   components: {
     ListaTareas,
   },
-  data() {
-    return {
-      api: "https://tareas-diarias.fly.dev/api/",
+  setup() {
+    const state = reactive({
+      api: "https://apitareasdiarias.fly.dev/api/",
       dia: "",
-      listaActividades: [],
-    }
-  },
-  methods: {
-    obtenerActividades() {
-      axios.get(this.api + "obtener-actividades")
-        .then(async (res) => {
-          let result = await res.data;
-          this.listaActividades = result.datos;
-        })
-        .catch((err) => {
-          this.error = true;
-          this.msgError = err;
-        })
-    },
-    obtenerDia() {
-      let fecha = new Date();
-      let diaNum = fecha.getDay();
+    });
 
-      switch (diaNum) {
-        case 0:
-          this.dia = "Domingo"
-          break;
-        case 1:
-          this.dia = "Lunes"
-          break;
-        case 2:
-          this.dia = "Martes"
-          break;
-        case 3:
-          this.dia = "Miércoles"
-          break;
-        case 4:
-          this.dia = "Jueves"
-          break;
-        case 5:
-          this.dia = "Viernes"
-          break;
-        case 6:
-          this.dia = "Sábado"
-          break;
-      }
-    },
+    const obtenerDia = () => {
+      const dias = [
+        "Domingo",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábado",
+      ];
+      const fecha = new Date();
+      const diaNum = fecha.getDay();
+      state.dia = dias[diaNum];
+    };
+
+    onMounted(async () => {
+      obtenerDia();
+    });
+
+    return {
+      state,
+    };
   },
-  mounted() {
-    this.obtenerActividades();
-    this.obtenerDia();
-  },
-}
+};
 </script>
 
 <style scoped>

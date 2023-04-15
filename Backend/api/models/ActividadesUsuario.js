@@ -7,7 +7,7 @@
 
 module.exports = {
 
-  tableName: "actividades_diarias_usuario",
+  tableName: "ActividadesDiariasUsuario",
 
   attributes: {
 
@@ -15,33 +15,32 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
-    id: { type: 'number', autoIncrement: true, columnName: 'id_adu' },
+    id: { type: 'number', autoIncrement: true },
 
-    est_adu: { type: 'boolean'},
+    estado: { type: 'boolean'},
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗
     //  ╚═╝╩ ╩╚═╝╚═╝═╩╝╚═╝
 
-    usuarios: {
-      model: "usuarios",
-      columnName: "id_adu_usr",
-    },
-
-    actividades: {
-      model: "actividades",
-      columnName: "id_adu_ad",
-    },
-    
-    dias: {
-      model: "dias",
-      columnName: "id_adu_ds",
-    },
-
     //  ╔═╗╔═╗╔═╗╔═╗╔═╗╦╔═╗╔╦╗╦╔═╗╔╗╔╔═╗
     //  ╠═╣╚═╗╚═╗║ ║║  ║╠═╣ ║ ║║ ║║║║╚═╗
     //  ╩ ╩╚═╝╚═╝╚═╝╚═╝╩╩ ╩ ╩ ╩╚═╝╝╚╝╚═╝
 
+    usuarioId: {
+      model: "usuarios",
+      columnName: "usuarioId",
+    },
+
+    actividadDiariaId: {
+      model: "actividades",
+      columnName: "actividadDiariaId",
+    },
+    
+    diaSemanaId: {
+      model: "dias",
+      columnName: "diaSemanaId",
+    },
   },
 
 };

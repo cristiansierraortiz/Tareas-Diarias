@@ -7,7 +7,7 @@
 
 module.exports = {
 
-  tableName: "dias_semana",
+  tableName: "DiasSemana",
 
   attributes: {
 
@@ -15,9 +15,9 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
-    id: { type: 'number', autoIncrement: true, columnName: 'id_ds' },
+    id: { type: 'number', autoIncrement: true },
 
-    nom_ds: { type: 'string' }
+    nombre: { type: 'string' }
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

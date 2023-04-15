@@ -7,7 +7,7 @@
 
 module.exports = {
 
-  tableName: "actividades_diarias",
+  tableName: "ActividadesDiarias",
 
   attributes: {
 
@@ -15,9 +15,9 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
-    id: { type: 'number', autoIncrement: true, columnName: 'id_ad' },
+    id: { type: 'number', autoIncrement: true },
 
-    nom_ad: { type: 'string' }
+    descripcion: { type: 'string' }
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

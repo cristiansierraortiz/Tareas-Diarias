@@ -13,9 +13,9 @@ module.exports = {
     //  ╠═╝╠╦╝║║║║║ ║ ║╚╗╔╝║╣ ╚═╗
     //  ╩  ╩╚═╩╩ ╩╩ ╩ ╩ ╚╝ ╚═╝╚═╝
 
-    id: { type: 'number', autoIncrement: true, columnName: 'id_usr' },
+    id: { type: 'number', autoIncrement: true },
     
-    nom_usr: { type: 'string' }
+    nombre: { type: 'string' }
 
     //  ╔═╗╔╦╗╔╗ ╔═╗╔╦╗╔═╗
     //  ║╣ ║║║╠╩╗║╣  ║║╚═╗

@@ -1,6 +1,6 @@
-# fly.toml file generated for tareas-diarias on 2023-03-12T02:59:31-05:00
+# fly.toml file generated for apitareasdiarias on 2023-04-15T03:43:38-05:00
 
-app = "tareas-diarias"
+app = "apitareasdiarias"
 kill_signal = "SIGINT"
 kill_timeout = 5
 primary_region = "mia"

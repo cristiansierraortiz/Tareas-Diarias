@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container-lista">
-      <div v-if="error">
+      <div v-if="state.error">
         <div class="card">
           <div class="card-body">
             <div class="alert alert-danger" role="alert">
@@ -9,21 +9,21 @@
                 <i class="fa fa-circle-xmark"></i>
                 <h6><strong>Upps! ha ocurrido un error</strong></h6>
               </div>
-              <p>{{ msgError }}</p>
+              <p>{{ state.msgError }}</p>
             </div>
           </div>
         </div>
       </div>
       <div v-else>
-        <div class="card" v-for="(actividad, index) in actividades"
-          v-show="(pag - 1) * num_results <= index && pag * num_results > index" :key="index">
+        <div class="card" v-for="(actividad, index) in state.listaActividades"
+          v-show="(state.pag - 1) * state.num_results <= index && state.pag * state.num_results > index" :key="index">
           <div class="card-body lista">
             <div class="icon-width">
-              <button @click="() => actualizarEstadoActividad(actividad.id_adu)" class="boton-estado"><i
-                  :class="actividad.est_adu ? 'fa fa-circle-check completada' : 'fa fa-circle-info incompleta'"></i></button>
+              <button @click="() => completarActividad(actividad.id)" class="boton-estado"><i
+                  :class="actividad.estado ? 'fa fa-circle-check completada' : 'fa fa-circle-info incompleta'"></i></button>
             </div>
             <div class="task-width">
-              <h6 :class="actividad.est_adu ? 'estilo-texto' : ''">{{ actividad.nom_ad }}</h6>
+              <h6 :class="actividad.estado ? 'estilo-texto' : ''">{{ actividad.actividadDiariaId.descripcion }}</h6>
             </div>
           </div>
         </div>
@@ -31,19 +31,22 @@
       <nav class="paginacion">
         <ul class="pagination">
           <li class="page-item">
-            <a class="page-link boton-paginacion" v-show="pag != 1" @click.prevent="pag -= 1">
+            <a class="page-link boton-paginacion" v-show="state.pag != 1" @click.prevent="state.pag -= 1">
               <span class="boton-paginacion">&laquo;</span>
             </a>
           </li>
-          <li class="page-item"><a class="page-link">{{ pag }}</a></li>
+          <li class="page-item"><a class="page-link">{{ state.pag }}</a></li>
           <li class="page-item">
-            <a class="page-link boton-paginacion" v-show="pag * num_results / actividades.length < 1"
-              @click.prevent="pag += 1">
+            <a class="page-link boton-paginacion"
+              v-show="state.pag * state.num_results / state.listaActividades.length < 1" @click.prevent="state.pag += 1">
               <span>&raquo;</span>
             </a>
           </li>
         </ul>
       </nav>
+      <div>
+        <button class="btn btn-outline-primary" @click="() => resetearEstadoActividades()">Resetear</button>
+      </div>
     </div>
   </div>
 </template>
@@ -51,42 +54,101 @@
 <script>
 import axios from "axios";
 import iziToast from "izitoast";
+import { onMounted, reactive, onUpdated } from "vue";
 
 export default {
-  name: 'ListaTareas',
-  props: {
-    actividades: Array,
-    metodoActualizar: Function,
-  },
-  data() {
-    return {
-      api: "https://tareas-diarias.fly.dev/api/",
+  setup() {
+    const state = reactive({
+      api: "https://apitareasdiarias.fly.dev/api/",
+      dia: "",
+      listaActividades: [],
       num_results: 5,
       pag: 1,
       msgError: "",
       error: false,
-    }
+    });
+
+    const obtenerActividades = async () => {
+      try {
+        const response = await axios.get(state.api + 'obtener-actividades');
+        state.listaActividades = response.data.datos;
+      } catch (error) {
+        state.error = true;
+        state.msgError = error.message;
+      }
+    };
+
+    const obtenerDia = () => {
+      const dias = [
+        "Domingo",
+        "Lunes",
+        "Martes",
+        "Miércoles",
+        "Jueves",
+        "Viernes",
+        "Sábado",
+      ];
+      const fecha = new Date();
+      const diaNum = fecha.getDay();
+      state.dia = dias[diaNum];
+    };
+
+    const completarActividad = async (id) => {
+      try {
+        const res = await axios.get(state.api + "completar-actividad/" + id);
+        const result = res.data;
+        if (res.status === 200) {
+          iziToast.show({
+            title: "SUCCESS",
+            titleColor: "#1dc74c",
+            color: "#fff",
+            class: "text-success",
+            position: "topRight",
+            message: result.mensaje,
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    const resetearEstadoActividades = async () => {
+      try {
+        const res = await axios.put(
+          `${state.api}resetear-actividades`
+        );
+        const result = res.data;
+        if (res.status === 200) {
+          iziToast.show({
+            title: "SUCCESS",
+            titleColor: "#1dc74c",
+            color: "#fff",
+            class: "text-success",
+            position: "topRight",
+            message: result.mensaje,
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    onMounted(async () => {
+      await obtenerActividades();
+      obtenerDia();
+    });
+
+    onUpdated(async () => {
+      await obtenerActividades();
+    })
+
+    return {
+      state,
+      completarActividad,
+      resetearEstadoActividades,
+    };
   },
-  methods: {
-    actualizarEstadoActividad(id) {
-      axios.get(this.api + "completar-actividad/" + id)
-        .then(async (res) => {
-          let result = res.data
-          if (res.status === 200) {
-            iziToast.show({
-              title: 'SUCCESS',
-              titleColor: '#1dc74c',
-              color: '#fff',
-              class: 'text-success',
-              position: 'topRight',
-              message: result.mensaje,
-            })
-            this.metodoActualizar();
-          }
-        })
-    },
-  },
-}
+};
 </script>
 
 <style>
