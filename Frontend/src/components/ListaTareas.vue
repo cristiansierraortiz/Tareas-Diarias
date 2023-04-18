@@ -54,11 +54,11 @@
 <script>
 import axios from "axios";
 import iziToast from "izitoast";
-import { onMounted, reactive, onUpdated } from "vue";
+import { onMounted, ref, onUpdated } from "vue";
 
 export default {
   setup() {
-    const state = reactive({
+    const state = ref({
       api: "https://apitareasdiarias.fly.dev/api/",
       dia: "",
       listaActividades: [],
@@ -70,11 +70,11 @@ export default {
 
     const obtenerActividades = async () => {
       try {
-        const response = await axios.get(state.api + 'obtener-actividades');
-        state.listaActividades = response.data.datos;
+        const response = await axios.get(state.value.api + 'obtener-actividades');
+        state.value.listaActividades = response.data.datos;
       } catch (error) {
-        state.error = true;
-        state.msgError = error.message;
+        state.value.error = true;
+        state.value.msgError = error.message;
       }
     };
 
@@ -90,12 +90,12 @@ export default {
       ];
       const fecha = new Date();
       const diaNum = fecha.getDay();
-      state.dia = dias[diaNum];
+      state.value.dia = dias[diaNum];
     };
 
     const completarActividad = async (id) => {
       try {
-        const res = await axios.get(state.api + "completar-actividad/" + id);
+        const res = await axios.get(state.value.api + "completar-actividad/" + id);
         const result = res.data;
         if (res.status === 200) {
           iziToast.show({
@@ -106,6 +106,7 @@ export default {
             position: "topRight",
             message: result.mensaje,
           });
+          await obtenerActividades();
         }
       } catch (err) {
         console.error(err);
@@ -115,7 +116,7 @@ export default {
     const resetearEstadoActividades = async () => {
       try {
         const res = await axios.put(
-          `${state.api}resetear-actividades`
+          `${state.value.api}resetear-actividades`
         );
         const result = res.data;
         if (res.status === 200) {
@@ -127,6 +128,7 @@ export default {
             position: "topRight",
             message: result.mensaje,
           });
+          await obtenerActividades();
         }
       } catch (err) {
         console.error(err);
@@ -140,7 +142,7 @@ export default {
 
     onUpdated(async () => {
       await obtenerActividades();
-    })
+    }, [state.value.listaActividades])
 
     return {
       state,

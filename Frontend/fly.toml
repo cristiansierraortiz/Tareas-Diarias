@@ -1,20 +1,21 @@
-# fly.toml file generated for apitareasdiarias on 2023-04-17T18:31:55-05:00
+# fly.toml file generated for tareas on 2023-04-17T22:41:19-05:00
 
-app = "apitareasdiarias"
+app = "tareas"
 kill_signal = "SIGINT"
 kill_timeout = 5
 primary_region = "mia"
 processes = []
 
 [env]
-  PORT = "8081"
 
 [experimental]
   auto_rollback = true
 
 [[services]]
+  autostart = true
+  autostop = false
   http_checks = []
-  internal_port = 8081
+  internal_port = 8080
   processes = ["app"]
   protocol = "tcp"
   script_checks = []
@@ -26,7 +27,7 @@ processes = []
   [[services.ports]]
     force_https = true
     handlers = ["http"]
-    port = 81
+    port = 80
 
   [[services.ports]]
     handlers = ["tls", "http"]

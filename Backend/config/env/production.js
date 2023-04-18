@@ -50,7 +50,7 @@ module.exports = {
       // adapter: 'sails-mysql',
       // url: 'mysql://user:password@host:port/database',
       adapter: require("sails-postgresql"),
-      url: "postgres://postgres:123456@database-postgres.fly.dev:5432/tareas-diarias",
+      url: "postgres://postgres:123456@cl-pg-tareas.fly.dev:5432/tareas-diarias",
       //--------------------------------------------------------------------------
       //  /\   To avoid checking it in to version control, you might opt to set
       //  ||   sensitive credentials like `url` using an environment variable.
@@ -358,7 +358,7 @@ module.exports = {
   * this, just try deploying without setting it and see if it works.)       *
   *                                                                         *
   ***************************************************************************/
-  // port: 80,
+  port: 8081,
 
 
 

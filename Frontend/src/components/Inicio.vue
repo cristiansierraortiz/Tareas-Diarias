@@ -20,7 +20,6 @@ export default {
   },
   setup() {
     const state = reactive({
-      api: "https://apitareasdiarias.fly.dev/api/",
       dia: "",
     });
 
