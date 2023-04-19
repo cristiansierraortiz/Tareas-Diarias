@@ -18,7 +18,7 @@ module.exports.routes = {
    *                                                                          *
    ***************************************************************************/
 
-  "GET /api/obtener-actividades": {
+  "GET /api/obtener-actividades/:actId": {
     controller: "ActividadesController",
     action: "obtenerActividades",
   },

@@ -8,16 +8,10 @@
 module.exports = {
   obtenerActividades: async (peticion, respuesta) => {
     try {
-      let fecha = new Date();
-      let dia = fecha.getDay();
-
-      if (dia === 0) {
-        dia = 7;
-      }
-
+      let idFinal = peticion.params.actId;
       const resultado = await ActividadesUsuario.find({
         where: {
-          diaSemanaId: dia,
+          diaSemanaId: idFinal,
         },
       })
         .populate("actividadDiariaId")

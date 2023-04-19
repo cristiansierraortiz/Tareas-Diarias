@@ -60,7 +60,8 @@ export default {
   setup() {
     const state = ref({
       api: "https://apitareasdiarias.fly.dev/api/",
-      dia: "",
+      nomDia: "",
+      numDia: 0,
       listaActividades: [],
       num_results: 5,
       pag: 1,
@@ -70,13 +71,24 @@ export default {
 
     const obtenerActividades = async () => {
       try {
-        const response = await axios.get(state.value.api + 'obtener-actividades');
+        const diaNum = obtenerNumeroDia();
+        if (diaNum === 0) {
+          diaNum = 7
+        }
+        console.log(diaNum)
+        const response = await axios.get(state.value.api + 'obtener-actividades/' + diaNum);
         state.value.listaActividades = response.data.datos;
       } catch (error) {
         state.value.error = true;
         state.value.msgError = error.message;
       }
     };
+
+    const obtenerNumeroDia = () => {
+      const fecha = new Date();
+      const diaNum = fecha.getDay();
+      return diaNum;
+    }
 
     const obtenerDia = () => {
       const dias = [
@@ -88,9 +100,8 @@ export default {
         "Viernes",
         "Sábado",
       ];
-      const fecha = new Date();
-      const diaNum = fecha.getDay();
-      state.value.dia = dias[diaNum];
+      const diaNum = obtenerNumeroDia();
+      state.value.nomDia = dias[diaNum];
     };
 
     const completarActividad = async (id) => {
