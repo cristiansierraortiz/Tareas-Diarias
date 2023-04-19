@@ -15,7 +15,12 @@ module.exports = {
         },
       })
         .populate("actividadDiariaId")
-        .populate("diaSemanaId");
+        .populate("diaSemanaId")
+        .sort([
+          {
+            estado: "ASC",
+          },
+        ]);
 
       let actividades = resultado;
       respuesta.status(200).json({ datos: actividades });

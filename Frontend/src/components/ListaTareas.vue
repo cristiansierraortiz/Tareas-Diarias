@@ -75,7 +75,6 @@ export default {
         if (diaNum === 0) {
           diaNum = 7
         }
-        console.log(diaNum)
         const response = await axios.get(state.value.api + 'obtener-actividades/' + diaNum);
         state.value.listaActividades = response.data.datos;
       } catch (error) {
